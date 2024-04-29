@@ -8,6 +8,8 @@ Here is my computer vision API using FastAPI which provides a simple and powerfu
 
 With image classification, pattern detection and semantic segmentation functionalities, my API provides the possibility of being integrated into decision-making tools, opening the way to an infinite range of applications, from intelligent surveillance to augmented reality.  
 
+![Example](./documentation/mask.png)
+
 ## Table of Contents
 
 - [Getting Started](#Getting-Started)
@@ -20,7 +22,7 @@ With image classification, pattern detection and semantic segmentation functiona
 You can't use my training model because of Github storage. But if you train your own model you can install and use my repository like this.  
 
 ```bash
-git clone https://github.com/HaDock404/ai-vision-futur_transport.git
+git clone https://github.com/HaDock404/api-vision-futur_transport.git
 cd api-vision-futur_transport
 pip install -r ./packages/requirements.txt
 ```  
@@ -32,3 +34,14 @@ You can't use my training model because of Github storage. But if you train your
 ```bash
 uvicorn api:app -—reload
 ```  
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License  
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
