@@ -5,12 +5,13 @@ from PIL import Image  # type: ignore
 from tensorflow.keras.preprocessing.image import img_to_array  # type: ignore
 from io import BytesIO
 import numpy as np  # type: ignore
+import cv2
 
 app = FastAPI()
 
 origins = [
     "http://127.0.0.1",
-    "http://127.0.0.1:8000"
+    "http://127.0.0.1:8000",
     "http://localhost",
     "http://127.0.0.1:5500",
     "http://localhost:5500"
@@ -18,7 +19,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="*",
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["POST"],
     allow_headers=["*"],
@@ -38,6 +39,25 @@ def load_saving_model():
 
 
 model = load_saving_model()
+
+
+def resizing_image(raw_image_bytes):
+    new_width, new_height = 2048, 1024
+    np_arr = np.frombuffer(raw_image_bytes, np.uint8)
+    image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+    if image is None:
+        raise ValueError("Image could not be decoded.")
+
+    resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
+    
+    # On repasse en bytes pour rester compatible avec le reste du traitement
+    is_success, buffer = cv2.imencode(".jpg", resized_image)
+    if not is_success:
+        raise ValueError("Image resizing failed during encoding.")
+
+    return buffer.tobytes()
+
 
 
 def preprocess_image(raw_image):
@@ -146,6 +166,7 @@ async def display_mask(file: UploadFile):
         Response: The response containing the masked image.
     """
     raw_image = await file.read()
+    raw_image = resizing_image(raw_image)
     processed_image = preprocess_image(raw_image)
     mask = create_mask(processed_image)
     display_img = display(mask, raw_image)
