@@ -16,6 +16,7 @@ grpcio==1.62.2
 h11==0.14.0
 h5py==3.11.0
 idna==3.7
+joblib==1.5.1
 keras==3.3.3
 libclang==18.1.1
 Markdown==3.6
@@ -26,17 +27,19 @@ ml-dtypes==0.3.2
 namex==0.0.8
 nltk==3.8.1
 numpy==1.26.4
+opencv-python==4.11.0.86
 opt-einsum==3.3.0
 optree==0.11.0
 packaging==24.0
 pillow==10.3.0
-pip==23.3.1
+pip==25.1.1
 protobuf==4.25.3
 pydantic==2.7.1
 pydantic_core==2.18.2
 Pygments==2.17.2
-Python-IO==0.3
+Python_IO==0.3
 python-multipart==0.0.9
+regex==2024.11.6
 requests==2.31.0
 rich==13.7.1
 setuptools==68.2.2
@@ -48,6 +51,7 @@ tensorboard-data-server==0.7.2
 tensorflow==2.16.1
 tensorflow-io-gcs-filesystem==0.36.0
 termcolor==2.4.0
+tqdm==4.67.1
 typing_extensions==4.11.0
 urllib3==2.2.1
 uvicorn==0.29.0
