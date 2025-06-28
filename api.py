@@ -6,6 +6,8 @@ from tensorflow.keras.preprocessing.image import img_to_array  # type: ignore
 from io import BytesIO
 import numpy as np  # type: ignore
 import cv2
+import tensorflow as tf
+import os
 
 app = FastAPI()
 
@@ -33,8 +35,21 @@ def load_saving_model():
     Returns:
         tensorflow.keras.Model: The loaded model.
     """
-    model_path = "./models/model_X.keras"
-    model = load_model(model_path, compile=False)
+    # local use
+    # model_path = "./models/model_X.keras"
+    # model = load_model(model_path, compile=False)
+    # return model
+    model_path_gcs = \
+        "https://storage.googleapis.com/hadock404-models/model_X.keras"
+    local_model_path = "/tmp/model_X.keras"
+
+    if not os.path.exists(local_model_path):
+        tf.keras.utils.get_file(
+            fname=local_model_path,
+            origin=model_path_gcs,
+            extract=False
+        )
+    model = load_model(local_model_path, compile=False)
     return model
 
 
@@ -49,15 +64,15 @@ def resizing_image(raw_image_bytes):
     if image is None:
         raise ValueError("Image could not be decoded.")
 
-    resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
-    
+    resized_image = cv2.resize(image, (new_width, new_height),
+                               interpolation=cv2.INTER_AREA)
+
     # On repasse en bytes pour rester compatible avec le reste du traitement
     is_success, buffer = cv2.imencode(".jpg", resized_image)
     if not is_success:
         raise ValueError("Image resizing failed during encoding.")
 
     return buffer.tobytes()
-
 
 
 def preprocess_image(raw_image):
